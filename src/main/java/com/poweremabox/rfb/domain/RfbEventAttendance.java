@@ -1,0 +1,113 @@
+package com.poweremabox.rfb.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.time.LocalDate;
+import javax.persistence.*;
+
+/**
+ * A RfbEventAttendance.
+ */
+@Entity
+@Table(name = "rfb_event_attendance")
+public class RfbEventAttendance implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "attendance_date")
+    private LocalDate attendanceDate;
+
+    @JsonIgnoreProperties(value = { "homeLocation" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private RfbUser rfbUser;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "rfbEventAttendances", "rfbLocation" }, allowSetters = true)
+    private RfbEvent rfbEvent;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RfbEventAttendance id(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public LocalDate getAttendanceDate() {
+        return this.attendanceDate;
+    }
+
+    public RfbEventAttendance attendanceDate(LocalDate attendanceDate) {
+        this.attendanceDate = attendanceDate;
+        return this;
+    }
+
+    public void setAttendanceDate(LocalDate attendanceDate) {
+        this.attendanceDate = attendanceDate;
+    }
+
+    public RfbUser getRfbUser() {
+        return this.rfbUser;
+    }
+
+    public RfbEventAttendance rfbUser(RfbUser rfbUser) {
+        this.setRfbUser(rfbUser);
+        return this;
+    }
+
+    public void setRfbUser(RfbUser rfbUser) {
+        this.rfbUser = rfbUser;
+    }
+
+    public RfbEvent getRfbEvent() {
+        return this.rfbEvent;
+    }
+
+    public RfbEventAttendance rfbEvent(RfbEvent rfbEvent) {
+        this.setRfbEvent(rfbEvent);
+        return this;
+    }
+
+    public void setRfbEvent(RfbEvent rfbEvent) {
+        this.rfbEvent = rfbEvent;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RfbEventAttendance)) {
+            return false;
+        }
+        return id != null && id.equals(((RfbEventAttendance) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "RfbEventAttendance{" +
+            "id=" + getId() +
+            ", attendanceDate='" + getAttendanceDate() + "'" +
+            "}";
+    }
+}

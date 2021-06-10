@@ -41,6 +41,8 @@
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "otherModules": [],
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "entities": ["RfbLocation", "RfbEvent", "RfbEventAttendance", "RfbUser"],
+    "lastLiquibaseTimestamp": 1623253889000
   }
 }
