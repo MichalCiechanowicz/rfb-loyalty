@@ -33,19 +33,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_rfbUser">Rfb User</label>
-          <select class="form-control" id="field_rfbUser" data-cy="rfbUser" name="rfbUser" formControlName="rfbUser">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="rfbUserOption.id === editForm.get('rfbUser')!.value?.id ? editForm.get('rfbUser')!.value : rfbUserOption"
-              *ngFor="let rfbUserOption of rfbUsersCollection; trackBy: trackRfbUserById"
-            >
-              {{ rfbUserOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_rfbEvent">Rfb Event</label>
           <select class="form-control" id="field_rfbEvent" data-cy="rfbEvent" name="rfbEvent" formControlName="rfbEvent">
             <option [ngValue]="null"></option>
@@ -54,6 +41,19 @@
               *ngFor="let rfbEventOption of rfbEventsSharedCollection; trackBy: trackRfbEventById"
             >
               {{ rfbEventOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rfbUser">Rfb User</label>
+          <select class="form-control" id="field_rfbUser" data-cy="rfbUser" name="rfbUser" formControlName="rfbUser">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="rfbUserOption.id === editForm.get('rfbUser')!.value?.id ? editForm.get('rfbUser')!.value : rfbUserOption"
+              *ngFor="let rfbUserOption of rfbUsersSharedCollection; trackBy: trackRfbUserById"
+            >
+              {{ rfbUserOption.id }}
             </option>
           </select>
         </div>

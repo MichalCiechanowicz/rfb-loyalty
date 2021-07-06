@@ -18,16 +18,16 @@
         <dd>
           <span>{{ rfbEventAttendance.attendanceDate | formatMediumDate }}</span>
         </dd>
-        <dt><span>Rfb User</span></dt>
-        <dd>
-          <div *ngIf="rfbEventAttendance.rfbUser">
-            <a [routerLink]="['/rfb-user', rfbEventAttendance.rfbUser?.id, 'view']">{{ rfbEventAttendance.rfbUser?.id }}</a>
-          </div>
-        </dd>
         <dt><span>Rfb Event</span></dt>
         <dd>
           <div *ngIf="rfbEventAttendance.rfbEvent">
             <a [routerLink]="['/rfb-event', rfbEventAttendance.rfbEvent?.id, 'view']">{{ rfbEventAttendance.rfbEvent?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Rfb User</span></dt>
+        <dd>
+          <div *ngIf="rfbEventAttendance.rfbUser">
+            <a [routerLink]="['/rfb-user', rfbEventAttendance.rfbUser?.id, 'view']">{{ rfbEventAttendance.rfbUser?.id }}</a>
           </div>
         </dd>
       </dl>

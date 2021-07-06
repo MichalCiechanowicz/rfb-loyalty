@@ -13,6 +13,12 @@
       "otherEntityRelationshipName": "rfbUser",
       "relationshipName": "homeLocation",
       "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "rfbEventAttendance",
+      "otherEntityRelationshipName": "rfbUser",
+      "relationshipName": "rfbEventAttendance"
     }
   ],
   "entityTableName": "rfb_user",

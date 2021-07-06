@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IRfbEventAttendance, RfbEventAttendance } from '../rfb-event-attendance.model';
 import { RfbEventAttendanceService } from '../service/rfb-event-attendance.service';
-import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
-import { RfbUserService } from 'app/entities/rfb-user/service/rfb-user.service';
 import { IRfbEvent } from 'app/entities/rfb-event/rfb-event.model';
 import { RfbEventService } from 'app/entities/rfb-event/service/rfb-event.service';
+import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
+import { RfbUserService } from 'app/entities/rfb-user/service/rfb-user.service';
 
 @Component({
   selector: 'jhi-rfb-event-attendance-update',
@@ -19,20 +19,20 @@ import { RfbEventService } from 'app/entities/rfb-event/service/rfb-event.servic
 export class RfbEventAttendanceUpdateComponent implements OnInit {
   isSaving = false;
 
-  rfbUsersCollection: IRfbUser[] = [];
   rfbEventsSharedCollection: IRfbEvent[] = [];
+  rfbUsersSharedCollection: IRfbUser[] = [];
 
   editForm = this.fb.group({
     id: [],
     attendanceDate: [],
-    rfbUser: [],
     rfbEvent: [],
+    rfbUser: [],
   });
 
   constructor(
     protected rfbEventAttendanceService: RfbEventAttendanceService,
-    protected rfbUserService: RfbUserService,
     protected rfbEventService: RfbEventService,
+    protected rfbUserService: RfbUserService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -59,11 +59,11 @@ export class RfbEventAttendanceUpdateComponent implements OnInit {
     }
   }
 
-  trackRfbUserById(index: number, item: IRfbUser): number {
+  trackRfbEventById(index: number, item: IRfbEvent): number {
     return item.id!;
   }
 
-  trackRfbEventById(index: number, item: IRfbEvent): number {
+  trackRfbUserById(index: number, item: IRfbUser): number {
     return item.id!;
   }
 
@@ -90,26 +90,21 @@ export class RfbEventAttendanceUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: rfbEventAttendance.id,
       attendanceDate: rfbEventAttendance.attendanceDate,
-      rfbUser: rfbEventAttendance.rfbUser,
       rfbEvent: rfbEventAttendance.rfbEvent,
+      rfbUser: rfbEventAttendance.rfbUser,
     });
 
-    this.rfbUsersCollection = this.rfbUserService.addRfbUserToCollectionIfMissing(this.rfbUsersCollection, rfbEventAttendance.rfbUser);
     this.rfbEventsSharedCollection = this.rfbEventService.addRfbEventToCollectionIfMissing(
       this.rfbEventsSharedCollection,
       rfbEventAttendance.rfbEvent
     );
+    this.rfbUsersSharedCollection = this.rfbUserService.addRfbUserToCollectionIfMissing(
+      this.rfbUsersSharedCollection,
+      rfbEventAttendance.rfbUser
+    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.rfbUserService
-      .query({ filter: 'rfbeventattendance-is-null' })
-      .pipe(map((res: HttpResponse<IRfbUser[]>) => res.body ?? []))
-      .pipe(
-        map((rfbUsers: IRfbUser[]) => this.rfbUserService.addRfbUserToCollectionIfMissing(rfbUsers, this.editForm.get('rfbUser')!.value))
-      )
-      .subscribe((rfbUsers: IRfbUser[]) => (this.rfbUsersCollection = rfbUsers));
-
     this.rfbEventService
       .query()
       .pipe(map((res: HttpResponse<IRfbEvent[]>) => res.body ?? []))
@@ -119,6 +114,14 @@ export class RfbEventAttendanceUpdateComponent implements OnInit {
         )
       )
       .subscribe((rfbEvents: IRfbEvent[]) => (this.rfbEventsSharedCollection = rfbEvents));
+
+    this.rfbUserService
+      .query()
+      .pipe(map((res: HttpResponse<IRfbUser[]>) => res.body ?? []))
+      .pipe(
+        map((rfbUsers: IRfbUser[]) => this.rfbUserService.addRfbUserToCollectionIfMissing(rfbUsers, this.editForm.get('rfbUser')!.value))
+      )
+      .subscribe((rfbUsers: IRfbUser[]) => (this.rfbUsersSharedCollection = rfbUsers));
   }
 
   protected createFromForm(): IRfbEventAttendance {
@@ -126,8 +129,8 @@ export class RfbEventAttendanceUpdateComponent implements OnInit {
       ...new RfbEventAttendance(),
       id: this.editForm.get(['id'])!.value,
       attendanceDate: this.editForm.get(['attendanceDate'])!.value,
-      rfbUser: this.editForm.get(['rfbUser'])!.value,
       rfbEvent: this.editForm.get(['rfbEvent'])!.value,
+      rfbUser: this.editForm.get(['rfbUser'])!.value,
     };
   }
 }

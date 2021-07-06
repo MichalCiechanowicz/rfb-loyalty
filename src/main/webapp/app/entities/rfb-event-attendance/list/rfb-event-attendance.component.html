@@ -34,8 +34,8 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="attendanceDate"><span>Attendance Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="rfbUser.id"><span>Rfb User</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="rfbEvent.id"><span>Rfb Event</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="rfbUser.id"><span>Rfb User</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -46,13 +46,13 @@
           </td>
           <td>{{ rfbEventAttendance.attendanceDate | formatMediumDate }}</td>
           <td>
-            <div *ngIf="rfbEventAttendance.rfbUser">
-              <a [routerLink]="['/rfb-user', rfbEventAttendance.rfbUser?.id, 'view']">{{ rfbEventAttendance.rfbUser?.id }}</a>
+            <div *ngIf="rfbEventAttendance.rfbEvent">
+              <a [routerLink]="['/rfb-event', rfbEventAttendance.rfbEvent?.id, 'view']">{{ rfbEventAttendance.rfbEvent?.id }}</a>
             </div>
           </td>
           <td>
-            <div *ngIf="rfbEventAttendance.rfbEvent">
-              <a [routerLink]="['/rfb-event', rfbEventAttendance.rfbEvent?.id, 'view']">{{ rfbEventAttendance.rfbEvent?.id }}</a>
+            <div *ngIf="rfbEventAttendance.rfbUser">
+              <a [routerLink]="['/rfb-user', rfbEventAttendance.rfbUser?.id, 'view']">{{ rfbEventAttendance.rfbUser?.id }}</a>
             </div>
           </td>
           <td class="text-right">

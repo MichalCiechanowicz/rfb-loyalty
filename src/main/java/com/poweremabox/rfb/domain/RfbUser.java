@@ -2,6 +2,8 @@ package com.poweremabox.rfb.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -24,6 +26,10 @@ public class RfbUser implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private RfbLocation homeLocation;
+
+    @OneToMany(mappedBy = "rfbUser")
+    @JsonIgnoreProperties(value = { "rfbEvent", "rfbUser" }, allowSetters = true)
+    private Set<RfbEventAttendance> rfbEventAttendances = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -63,6 +69,37 @@ public class RfbUser implements Serializable {
 
     public void setHomeLocation(RfbLocation rfbLocation) {
         this.homeLocation = rfbLocation;
+    }
+
+    public Set<RfbEventAttendance> getRfbEventAttendances() {
+        return this.rfbEventAttendances;
+    }
+
+    public RfbUser rfbEventAttendances(Set<RfbEventAttendance> rfbEventAttendances) {
+        this.setRfbEventAttendances(rfbEventAttendances);
+        return this;
+    }
+
+    public RfbUser addRfbEventAttendance(RfbEventAttendance rfbEventAttendance) {
+        this.rfbEventAttendances.add(rfbEventAttendance);
+        rfbEventAttendance.setRfbUser(this);
+        return this;
+    }
+
+    public RfbUser removeRfbEventAttendance(RfbEventAttendance rfbEventAttendance) {
+        this.rfbEventAttendances.remove(rfbEventAttendance);
+        rfbEventAttendance.setRfbUser(null);
+        return this;
+    }
+
+    public void setRfbEventAttendances(Set<RfbEventAttendance> rfbEventAttendances) {
+        if (this.rfbEventAttendances != null) {
+            this.rfbEventAttendances.forEach(i -> i.setRfbUser(null));
+        }
+        if (rfbEventAttendances != null) {
+            rfbEventAttendances.forEach(i -> i.setRfbUser(this));
+        }
+        this.rfbEventAttendances = rfbEventAttendances;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

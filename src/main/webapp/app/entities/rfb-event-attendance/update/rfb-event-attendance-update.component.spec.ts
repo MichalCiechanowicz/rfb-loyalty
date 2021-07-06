@@ -9,10 +9,10 @@ import { of, Subject } from 'rxjs';
 
 import { RfbEventAttendanceService } from '../service/rfb-event-attendance.service';
 import { IRfbEventAttendance, RfbEventAttendance } from '../rfb-event-attendance.model';
-import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
-import { RfbUserService } from 'app/entities/rfb-user/service/rfb-user.service';
 import { IRfbEvent } from 'app/entities/rfb-event/rfb-event.model';
 import { RfbEventService } from 'app/entities/rfb-event/service/rfb-event.service';
+import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
+import { RfbUserService } from 'app/entities/rfb-user/service/rfb-user.service';
 
 import { RfbEventAttendanceUpdateComponent } from './rfb-event-attendance-update.component';
 
@@ -22,8 +22,8 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<RfbEventAttendanceUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let rfbEventAttendanceService: RfbEventAttendanceService;
-    let rfbUserService: RfbUserService;
     let rfbEventService: RfbEventService;
+    let rfbUserService: RfbUserService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -37,31 +37,13 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(RfbEventAttendanceUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       rfbEventAttendanceService = TestBed.inject(RfbEventAttendanceService);
-      rfbUserService = TestBed.inject(RfbUserService);
       rfbEventService = TestBed.inject(RfbEventService);
+      rfbUserService = TestBed.inject(RfbUserService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call rfbUser query and add missing value', () => {
-        const rfbEventAttendance: IRfbEventAttendance = { id: 456 };
-        const rfbUser: IRfbUser = { id: 75366 };
-        rfbEventAttendance.rfbUser = rfbUser;
-
-        const rfbUserCollection: IRfbUser[] = [{ id: 4805 }];
-        spyOn(rfbUserService, 'query').and.returnValue(of(new HttpResponse({ body: rfbUserCollection })));
-        const expectedCollection: IRfbUser[] = [rfbUser, ...rfbUserCollection];
-        spyOn(rfbUserService, 'addRfbUserToCollectionIfMissing').and.returnValue(expectedCollection);
-
-        activatedRoute.data = of({ rfbEventAttendance });
-        comp.ngOnInit();
-
-        expect(rfbUserService.query).toHaveBeenCalled();
-        expect(rfbUserService.addRfbUserToCollectionIfMissing).toHaveBeenCalledWith(rfbUserCollection, rfbUser);
-        expect(comp.rfbUsersCollection).toEqual(expectedCollection);
-      });
-
       it('Should call RfbEvent query and add missing value', () => {
         const rfbEventAttendance: IRfbEventAttendance = { id: 456 };
         const rfbEvent: IRfbEvent = { id: 84547 };
@@ -81,19 +63,38 @@ describe('Component Tests', () => {
         expect(comp.rfbEventsSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call RfbUser query and add missing value', () => {
+        const rfbEventAttendance: IRfbEventAttendance = { id: 456 };
+        const rfbUser: IRfbUser = { id: 75366 };
+        rfbEventAttendance.rfbUser = rfbUser;
+
+        const rfbUserCollection: IRfbUser[] = [{ id: 4805 }];
+        spyOn(rfbUserService, 'query').and.returnValue(of(new HttpResponse({ body: rfbUserCollection })));
+        const additionalRfbUsers = [rfbUser];
+        const expectedCollection: IRfbUser[] = [...additionalRfbUsers, ...rfbUserCollection];
+        spyOn(rfbUserService, 'addRfbUserToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ rfbEventAttendance });
+        comp.ngOnInit();
+
+        expect(rfbUserService.query).toHaveBeenCalled();
+        expect(rfbUserService.addRfbUserToCollectionIfMissing).toHaveBeenCalledWith(rfbUserCollection, ...additionalRfbUsers);
+        expect(comp.rfbUsersSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const rfbEventAttendance: IRfbEventAttendance = { id: 456 };
-        const rfbUser: IRfbUser = { id: 36404 };
-        rfbEventAttendance.rfbUser = rfbUser;
         const rfbEvent: IRfbEvent = { id: 133 };
         rfbEventAttendance.rfbEvent = rfbEvent;
+        const rfbUser: IRfbUser = { id: 36404 };
+        rfbEventAttendance.rfbUser = rfbUser;
 
         activatedRoute.data = of({ rfbEventAttendance });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(rfbEventAttendance));
-        expect(comp.rfbUsersCollection).toContain(rfbUser);
         expect(comp.rfbEventsSharedCollection).toContain(rfbEvent);
+        expect(comp.rfbUsersSharedCollection).toContain(rfbUser);
       });
     });
 
@@ -162,18 +163,18 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
-      describe('trackRfbUserById', () => {
-        it('Should return tracked RfbUser primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackRfbUserById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
       describe('trackRfbEventById', () => {
         it('Should return tracked RfbEvent primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackRfbEventById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackRfbUserById', () => {
+        it('Should return tracked RfbUser primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackRfbUserById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

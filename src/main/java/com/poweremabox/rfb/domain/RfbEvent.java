@@ -27,7 +27,7 @@ public class RfbEvent implements Serializable {
     private String eventCode;
 
     @OneToMany(mappedBy = "rfbEvent")
-    @JsonIgnoreProperties(value = { "rfbUser", "rfbEvent" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "rfbEvent", "rfbUser" }, allowSetters = true)
     private Set<RfbEventAttendance> rfbEventAttendances = new HashSet<>();
 
     @ManyToOne

@@ -1,20 +1,20 @@
 import * as dayjs from 'dayjs';
-import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
 import { IRfbEvent } from 'app/entities/rfb-event/rfb-event.model';
+import { IRfbUser } from 'app/entities/rfb-user/rfb-user.model';
 
 export interface IRfbEventAttendance {
   id?: number;
   attendanceDate?: dayjs.Dayjs | null;
-  rfbUser?: IRfbUser | null;
   rfbEvent?: IRfbEvent | null;
+  rfbUser?: IRfbUser | null;
 }
 
 export class RfbEventAttendance implements IRfbEventAttendance {
   constructor(
     public id?: number,
     public attendanceDate?: dayjs.Dayjs | null,
-    public rfbUser?: IRfbUser | null,
-    public rfbEvent?: IRfbEvent | null
+    public rfbEvent?: IRfbEvent | null,
+    public rfbUser?: IRfbUser | null
   ) {}
 }
 
